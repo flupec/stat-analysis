@@ -61,7 +61,7 @@ if __name__ == "__main__":
     print("{} > {}".format(estimatedPearson ** 2, tmp))
 
     print("===============REAL DATASET===============")
-    qWave, rWave = readDataset("/home/flupec/Downloads/arrhythmia.data")
+    qWave, rWave = readDataset("arrhythmia.data")
     # qWave, rWave = list(filter(lambda x: x[0] != 0 and x[1] != 0, zip(qWave, rWave)))
     # rds = [(q, r) for (q, r) in list(zip(qWave, rWave)) if not np.isclose(q, 0.0) and not np.isclose(r, 0.0)]
     # qWave, rWave = rds[0], rds[1]
