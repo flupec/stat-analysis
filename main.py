@@ -72,3 +72,5 @@ if __name__ == "__main__":
     print("Estimated Pearson coeff={}".format(estimatedPearsonFromDataset))
     tmp = (1 + (datasetLen - 2) / (student(df=datasetLen-2).ppf(0.975))) ** -1 # r^2 должен быть > чем эта величина
     print("{} > {}".format(estimatedPearsonFromDataset ** 2, tmp))
+
+    print("There are 162 entries with zero values at R WAVE series (y axis)")
