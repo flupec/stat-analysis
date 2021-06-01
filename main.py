@@ -10,7 +10,7 @@ a = 10
 b = 0.1
 stdSqr = 1
 
-def readDataset(filepath: str)->([], []):
+def readDataset(filepath: str):
     qWave, rWave = [], []
     with open(filepath, "r") as f:
         while True:
@@ -23,7 +23,7 @@ def readDataset(filepath: str)->([], []):
     
     return qWave, rWave
 
-def predict(ys: [], xs: [])->(float, float):
+def predict(ys, xs):
     meanXs, meanYs = stats.fmean(xs), stats.fmean(ys)
     aNumerator = np.sum([(x - meanXs) * (y - meanYs) for x, y in zip(xs, ys)])
     aDenumerator = np.sum([(x - meanXs) ** 2 for x in xs])
@@ -32,7 +32,7 @@ def predict(ys: [], xs: [])->(float, float):
     
     return a, b
 
-def getDetermFactor(ys: [], predictedYs: [], xs: [])-> float:
+def getDetermFactor(ys, predictedYs, xs)-> float:
     return 1 - np.sum((pry - y) ** 2 for pry, y in zip(predictedYs, ys)) / np.sum([(y - stats.fmean(ys)) ** 2 for y in ys])
 
 if __name__ == "__main__":
