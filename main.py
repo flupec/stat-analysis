@@ -9,7 +9,7 @@ n = int(10 ** 4)
 a = (0, 1)
 R = ((4, 3), (3, 9))
 
-def readDataset(filepath: str)->([], []):
+def readDataset(filepath: str):
     qWave, rWave = [], []
     with open(filepath, "r") as f:
         while True:
@@ -17,8 +17,8 @@ def readDataset(filepath: str)->([], []):
             if not line:
                 break
             splitted = line.split(",")
-            qWave.append(float(splitted[161]))
-            rWave.append(float(splitted[162]))
+            qWave.append(float(splitted[160]))
+            rWave.append(float(splitted[161]))
     return qWave, rWave
 
 def getCorrelation(xs, ys)->float:
@@ -39,7 +39,7 @@ def getPearson(xs, ys) -> float:
 def getRealPearson() -> float:
     return R[0][1] / np.sqrt(R[0][0] * R[1][1])
 
-def generate2DGaussianVector() -> (float, float):
+def generate2DGaussianVector():
     x1 = stats.NormalDist(0, 1).samples(n)
     x2 = stats.NormalDist(0, 1).samples(n)
     y1 = [np.sqrt(R[0][0]) * x for x in x1]
@@ -47,7 +47,7 @@ def generate2DGaussianVector() -> (float, float):
 
     return [y + a[0] for y in y1], [y + a[1] for y in y2]
 
-def visualize(xs: [float], ys: [float]):
+def visualize(xs, ys):
     plt.scatter(xs, ys, s=0.5)
     plt.show()
 
@@ -58,21 +58,18 @@ if __name__ == "__main__":
     estimatedPearson = getPearson(y[0], y[1])
     print("Estimated Pearson coeff={}".format(estimatedPearson))
     print("Real Pearson coeff={}".format(getRealPearson()))
-
-    tmp = (1 + (n - 2) / (student(df=n-2).ppf(0.975))) ** -1 # r^2 должен быть > чем эта величина
-    print("{} > {}".format(estimatedPearson ** 2, tmp))
+    alpha = 0.05 # Уровень значимости
+    tmp = (1 + (n - 2) / (student(df=n-2).ppf(1 - alpha / 2))) ** -1 # r^2 должен быть > чем эта величина
+    print("Dependent if {} > {}".format(estimatedPearson ** 2, tmp))
 
     print("===============REAL DATASET===============")
     qWave, rWave = readDataset("arrhythmia.data")
-    # qWave, rWave = list(filter(lambda x: x[0] != 0 and x[1] != 0, zip(qWave, rWave)))
-    # rds = [(q, r) for (q, r) in list(zip(qWave, rWave)) if not np.isclose(q, 0.0) and not np.isclose(r, 0.0)]
-    # qWave, rWave = rds[0], rds[1]
-    # print(len(qWave), len(rWave))
+    
     visualize(qWave, rWave)
     estimatedPearsonFromDataset = getPearson(qWave, rWave)
     datasetLen = len(qWave)
     print("Estimated Pearson coeff={}".format(estimatedPearsonFromDataset))
     tmp = (1 + (datasetLen - 2) / (student(df=datasetLen-2).ppf(0.975))) ** -1 # r^2 должен быть > чем эта величина
-    print("{} > {}".format(estimatedPearsonFromDataset ** 2, tmp))
+    print("Dependent if {} > {}".format(estimatedPearsonFromDataset ** 2, tmp))
 
     print("There are 162 entries with zero values at R WAVE series (y axis)")
