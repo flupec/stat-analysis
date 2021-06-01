@@ -31,17 +31,18 @@ def generate2DGaussianVector(samplesAmount: int, mean: float, R: List[List]):
     return [y + mean[0] for y in y1], [y + mean[1] for y in y2]
 
 def readDataset(filepath: str)->list:
-    qWave, rWave = [], []
+    qWave, rWave, sex = [], [], []
     with open(filepath, "r") as f:
         while True:
             line = f.readline()
             if not line:
                 break
             splitted = line.split(",")
-            qWave.append(np.float(splitted[161]))
-            rWave.append(np.float(splitted[162]))
+            qWave.append(np.float(splitted[160]))
+            rWave.append(np.float(splitted[161]))
+            sex.append(np.int(splitted[1]))
     
-    return qWave, rWave
+    return qWave, rWave, sex
 
 if __name__ == "__main__":
     xs1, ys1 = generate2DGaussianVector(n1, a1, R1)
@@ -49,7 +50,7 @@ if __name__ == "__main__":
 
     labels = {0: "o", 1: "^"}
     colors = {0: "r", 1: "g"}
-
+    print("=============SYNTHETIC=============")
     plt.scatter(xs1, ys1, marker=labels[0], s=10, c=colors[0])
     plt.scatter(xs2, ys2, marker=labels[1], s=10, c=colors[1])
     plt.show()
@@ -70,4 +71,29 @@ if __name__ == "__main__":
     plt.scatter(kmeans.cluster_centers_[1][0], kmeans.cluster_centers_[1][1], marker="*", s=40, c="y")
     plt.show()
 
+    print("Sum of squared distances is", kmeans.inertia_)
+
+    qWave, rWave, sex = readDataset("arrhythmia.data")
+    print("=============REAL=============")
+    X = [[qWave[i], rWave[i]] for i in range(len(qWave))]
+    for i in range(len(X)):
+        vec = X[i]
+        label = sex[i]
+        plt.scatter(vec[0], vec[1], s=10, marker=labels[label], c=colors[label])
+    plt.show()
+
+    kmeans = cluster.KMeans(n_clusters=2, verbose=1 if verbose else 0).fit(X)
+    predicted = kmeans.labels_
+    print("datasetlen", len(X))
+    amountOfNotEqualLabels = 0
+    for i in range(len(predicted)):
+        vec = X[i]
+        label = predicted[i]
+        if label != sex[i]:
+            amountOfNotEqualLabels += 1
+        plt.scatter(vec[0], vec[1], marker=labels[label], s=10, c=colors[label])
+    print("{} amount of samples got wrong class value".format(amountOfNotEqualLabels))
+    plt.scatter(kmeans.cluster_centers_[0][0], kmeans.cluster_centers_[0][1], marker="*", s=40, c="y")
+    plt.scatter(kmeans.cluster_centers_[1][0], kmeans.cluster_centers_[1][1], marker="*", s=40, c="y")
+    plt.show()
     print("Sum of squared distances is", kmeans.inertia_)
