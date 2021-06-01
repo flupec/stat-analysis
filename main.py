@@ -21,16 +21,18 @@ def readDataset(filepath: str)->([], []):
             rWave.append(float(splitted[162]))
     return qWave, rWave
 
-
-def getPearson(xs: [float], ys: [float]) -> float:
+def getCorrelation(xs, ys)->float:
     xys = [x * y for x, y in zip(xs, ys)]
+    meanXs, meanYs = stats.fmean(xs), stats.fmean(ys)
+    
+    return stats.fmean(xys) - meanXs * meanYs
+
+def getPearson(xs, ys) -> float:
+    numerator = getCorrelation(xs, ys)
     xsSquare = [x ** 2 for x in xs]
     ysSquare = [y ** 2 for y in ys]
     meanXs, meanYs = stats.fmean(xs), stats.fmean(ys)
-    
-    numerator = stats.fmean(xys) - meanXs * meanYs
     denumerator = np.sqrt(stats.fmean(xsSquare) - meanXs ** 2) * np.sqrt(stats.fmean(ysSquare) - meanYs ** 2)
-    
     
     return numerator / denumerator
 
@@ -42,8 +44,8 @@ def generate2DGaussianVector() -> (float, float):
     x2 = stats.NormalDist(0, 1).samples(n)
     y1 = [np.sqrt(R[0][0]) * x for x in x1]
     y2 = [R[0][1] * x1[i] / np.sqrt(R[0][0]) + np.sqrt(R[1][1] - R[0][1] ** 2 / R[0][0]) * x2[i] for i in range(len(x1))]
-    
-    return y1, y2
+
+    return [y + a[0] for y in y1], [y + a[1] for y in y2]
 
 def visualize(xs: [float], ys: [float]):
     plt.scatter(xs, ys, s=0.5)
