@@ -13,17 +13,13 @@ stdSqr = 1
 def readDataset(filepath: str)->([], []):
     qWave, rWave = [], []
     with open(filepath, "r") as f:
-        zeros = []
         while True:
             line = f.readline()
             if not line:
                 break
             splitted = line.split(",")
-            if np.isclose(float(splitted[162]), 0.0):
-                print(splitted[162])
-            qWave.append(float(splitted[161]))
-            rWave.append(float(splitted[162]))
-        print(len(zeros))
+            qWave.append(float(splitted[160]))
+            rWave.append(float(splitted[161]))
     
     return qWave, rWave
 
