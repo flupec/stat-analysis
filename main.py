@@ -45,7 +45,7 @@ if __name__ == "__main__":
     predictedA, predictedB = predict(ys, xs)
     predictedYs = [predictedA * x + predictedB for x in xs]
     determFactor = getDetermFactor(ys, predictedYs, xs)
-    print("Predicted: a={}, b={}, R={}".format(predictedA, predictedB, determFactor))
+    print("Predicted: a={}, b={}, R^2={}".format(predictedA, predictedB, determFactor))
 
     plt.plot(xs, ys, "o", markersize=0.5)
     plt.plot(xs, predictedYs, "-")
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     predictedA, predictedB = predict(realY, realX)
     predictedYs = [predictedA * x + predictedB for x in realX]
     determFactor = getDetermFactor(realY, predictedYs, realX)
-    print("Predicted: a={}, b={}, R={}".format(predictedA, predictedB, determFactor))
+    print("Predicted: a={}, b={}, R^2={}".format(predictedA, predictedB, determFactor))
     plt.plot(realX, realY, "o", markersize=0.5)
     plt.plot(realX, predictedYs, "-")
     plt.show()
