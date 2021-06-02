@@ -32,7 +32,7 @@ def predict(ys, xs):
     
     return a, b
 
-def getDetermFactor(ys, predictedYs, xs)-> float:
+def getDetermFactor(ys, predictedYs)-> float:
     return 1 - np.sum((pry - y) ** 2 for pry, y in zip(predictedYs, ys)) / np.sum([(y - stats.fmean(ys)) ** 2 for y in ys])
 
 if __name__ == "__main__":
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     
     predictedA, predictedB = predict(ys, xs)
     predictedYs = [predictedA * x + predictedB for x in xs]
-    determFactor = getDetermFactor(ys, predictedYs, xs)
+    determFactor = getDetermFactor(ys, predictedYs)
     print("Predicted: a={}, b={}, R^2={}".format(predictedA, predictedB, determFactor))
 
     plt.plot(xs, ys, "o", markersize=0.5)
@@ -55,7 +55,7 @@ if __name__ == "__main__":
     realX, realY = readDataset("arrhythmia.data")
     predictedA, predictedB = predict(realY, realX)
     predictedYs = [predictedA * x + predictedB for x in realX]
-    determFactor = getDetermFactor(realY, predictedYs, realX)
+    determFactor = getDetermFactor(realY, predictedYs)
     print("Predicted: a={}, b={}, R^2={}".format(predictedA, predictedB, determFactor))
     plt.plot(realX, realY, "o", markersize=0.5)
     plt.plot(realX, predictedYs, "-")
