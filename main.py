@@ -60,7 +60,7 @@ if __name__ == "__main__":
     print("Real Pearson coeff={}".format(getRealPearson()))
     alpha = 0.05 # Уровень значимости
     tmp = (1 + (n - 2) / (student(df=n-2).ppf(1 - alpha / 2))) ** -1 # r^2 должен быть > чем эта величина
-    print("Dependent if {} > {}".format(estimatedPearson ** 2, tmp))
+    print("Correlated if {} > {}".format(estimatedPearson ** 2, tmp))
 
     print("===============REAL DATASET===============")
     qWave, rWave = readDataset("arrhythmia.data")
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     estimatedPearsonFromDataset = getPearson(qWave, rWave)
     datasetLen = len(qWave)
     print("Estimated Pearson coeff={}".format(estimatedPearsonFromDataset))
-    tmp = (1 + (datasetLen - 2) / (student(df=datasetLen-2).ppf(0.975))) ** -1 # r^2 должен быть > чем эта величина
-    print("Dependent if {} > {}".format(estimatedPearsonFromDataset ** 2, tmp))
+    tmp = (1 + (datasetLen - 2) / (student(df=datasetLen-2).ppf(1 - alpha / 2))) ** -1 # r^2 должен быть > чем эта величина
+    print("Correlated if {} > {}".format(estimatedPearsonFromDataset ** 2, tmp))
 
     print("There are 162 entries with zero values at R WAVE series (y axis)")
